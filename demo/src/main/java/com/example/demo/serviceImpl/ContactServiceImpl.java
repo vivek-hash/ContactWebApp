@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.ContactNotFoundException;
 import com.example.demo.model.Contact;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.service.ContactService;
@@ -38,34 +41,58 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	public Contact getContactById(Integer contactId) {
-		Optional<Contact>findById=repo.findById(contactId);
-		if(findById.isPresent())
-			return findById.get();
-		return null;
+		
+		Contact contact = repo.findById(contactId).orElseThrow(
+				()->new ContactNotFoundException("Contact '"+ contactId +"' Not Exists"));
+
+		return contact;
+		
+//		Optional<Contact>findById=repo.findById(contactId);
+//		if(findById.isPresent())
+//			return findById.get();
+//		return null;
 	}
 
 	@Override
 	public String updateContact(Contact contact) {
+		
 		if(repo.existsById(contact.getContactId())) {
 
 			repo.save(contact).getContactId();
 			
 			return "contact updated";
-		}else {
-			
-		
-		return null;
+		}
+		else 
+		{
+		return "Contact not updated";
 	}
 }
 
 	@Override
 	public String deleteContact(Integer contact) {
+	
 		if(repo.existsById(contact)) {
+		
 			repo.deleteById(contact);
-			return"contact deleted";
-		}else {
+			
+			return"Contact deleted successfully";
+		}
+		else
+		{
+			return "Contact not deleted";
+		}
+	}
+
+	@Override
+	public Page<Contact> getAllContact(Pageable pageable) {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isEmployeeExitsByEmail(String email) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

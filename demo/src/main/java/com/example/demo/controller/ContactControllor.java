@@ -22,23 +22,32 @@ public class ContactControllor {
 	
 	@PostMapping("/contact")
 	public String savecontact(@RequestBody Contact contact) {
+		
 		String Data= service.savecontact(contact);
+		
 		return Data;
 	}
+	
 	@GetMapping("/contacts")
 	public List<Contact>getAllContacts(){
+		
 		return service.getAllContacts();
 	}
 	@GetMapping("/contact/{contactId}")
 	public Contact getContactById(@PathVariable Integer contactId) {
+	
 		return service.getContactById(contactId);
 	}
+	
 	@PutMapping("/update")
 	public String updateContact(@RequestBody Contact contact) {
+		
 		return service.updateContact(contact);
 	}
+	
 	@DeleteMapping("/contact/{contactId}")
 	public String deleteContact(@PathVariable Integer contact) {
+		
 		return service.deleteContact(contact);
 	}
 }
